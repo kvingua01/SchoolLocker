@@ -1,0 +1,12 @@
+{
+  "name": "schoollocker",
+  "version": "1.0.0",
+  "description": "Bob's School Locker multiplication practice site",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
