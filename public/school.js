@@ -1,6 +1,6 @@
 // =====================================================
 // BOB'S SCHOOL LOCKER
-// SPEAKEASY-STYLE GAME REVEAL
+// SECRET 6 × 7 -> 42 -> CLICK 63
 // =====================================================
 
 
@@ -12,10 +12,10 @@ const FRIEND_CODE = "bob67123";
 
 
 // =====================================================
-// STATE
+// SECRET STATE
 // =====================================================
 
-let mathUnlocked = false;
+let secret63Unlocked = false;
 
 
 // =====================================================
@@ -30,11 +30,6 @@ const schoolOverlay =
 const gameFrame =
     document.getElementById(
         "gameFrame"
-    );
-
-const secretCorner =
-    document.getElementById(
-        "secretCorner"
     );
 
 const numberOne =
@@ -94,7 +89,7 @@ const multiplicationTable =
 
 
 // =====================================================
-// CREATE NUMBER MENUS
+// CREATE NUMBER SELECTORS
 // =====================================================
 
 function createNumberSelectors() {
@@ -160,6 +155,9 @@ function createMultiplicationTable() {
             column++
         ) {
 
+            const value =
+                row * column;
+
             const cell =
                 document.createElement(
                     "div"
@@ -169,7 +167,31 @@ function createMultiplicationTable() {
                 "tableCell";
 
             cell.textContent =
-                row * column;
+                value;
+
+
+            /*
+                63 IS THE SECRET DOOR.
+
+                It looks exactly like every
+                other multiplication-table number.
+
+                The click only works after
+                correctly solving exactly:
+
+                6 × 7 = 42
+            */
+
+            if (
+                value === 63
+            ) {
+
+                cell.addEventListener(
+                    "click",
+                    openSecretDoor
+                );
+            }
+
 
             multiplicationTable.appendChild(
                 cell
@@ -201,14 +223,22 @@ function updateProblem() {
         secondNumber +
         " = ?";
 
+
     answerInput.value =
         "";
 
     mathMessage.textContent =
         "";
 
-    mathUnlocked =
+
+    /*
+        Changing the multiplication problem
+        locks the secret again.
+    */
+
+    secret63Unlocked =
         false;
+
 
     friendSection.style.display =
         "none";
@@ -218,6 +248,7 @@ function updateProblem() {
 
     friendMessage.textContent =
         "";
+
 
     answerInput.focus();
 }
@@ -263,26 +294,16 @@ function checkAnswer() {
         );
 
 
+    // =================================================
+    // WRONG ANSWER
+    // =================================================
+
     if (
-        submittedAnswer ===
+        submittedAnswer !==
         correctAnswer
     ) {
 
-        mathUnlocked =
-            true;
-
-        mathMessage.style.color =
-            "#238636";
-
-        mathMessage.textContent =
-            "Correct! Great job.";
-
-        friendSection.style.display =
-            "none";
-
-    } else {
-
-        mathUnlocked =
+        secret63Unlocked =
             false;
 
         mathMessage.style.color =
@@ -294,26 +315,84 @@ function checkAnswer() {
         friendSection.style.display =
             "none";
 
-        friendCodeInput.value =
-            "";
-
-        friendMessage.textContent =
-            "";
+        return;
     }
+
+
+    // =================================================
+    // CORRECT ANSWER
+    // =================================================
+
+    mathMessage.style.color =
+        "#238636";
+
+    mathMessage.textContent =
+        "Correct! Great job.";
+
+
+    /*
+        THE SECRET ONLY UNLOCKS FOR:
+
+        6 × 7 = 42
+
+        7 × 6 DOES NOT COUNT.
+
+        Any other correct multiplication
+        problem also does not count.
+    */
+
+    if (
+        firstNumber === 6 &&
+        secondNumber === 7 &&
+        submittedAnswer === 42
+    ) {
+
+        secret63Unlocked =
+            true;
+
+    } else {
+
+        secret63Unlocked =
+            false;
+    }
+
+
+    /*
+        Do NOT show the Friend Access panel.
+
+        Even after 6 × 7 is solved,
+        the player still has to know
+        to click a 63 in the table.
+    */
+
+    friendSection.style.display =
+        "none";
 }
 
 
 // =====================================================
-// SECRET CORNER
+// CLICKING 63
 // =====================================================
 
 function openSecretDoor() {
 
+    /*
+        Clicking 63 normally does absolutely nothing.
+    */
+
     if (
-        !mathUnlocked
+        !secret63Unlocked
     ) {
+
         return;
     }
+
+
+    /*
+        Once 6 × 7 = 42 has been
+        correctly completed, clicking
+        63 opens the Back Room.
+    */
 
     if (
         friendSection.style.display ===
@@ -326,11 +405,13 @@ function openSecretDoor() {
         return;
     }
 
+
     friendSection.style.display =
         "block";
 
     friendMessage.textContent =
         "";
+
 
     setTimeout(
         () => {
@@ -344,31 +425,6 @@ function openSecretDoor() {
 
 
 // =====================================================
-// REVEAL BLOCKBATTLE
-// =====================================================
-
-function revealGame() {
-
-    schoolOverlay.classList.add(
-        "unlocking"
-    );
-
-    setTimeout(
-        () => {
-
-            schoolOverlay.classList.add(
-                "hidden"
-            );
-
-            gameFrame.focus();
-
-        },
-        1000
-    );
-}
-
-
-// =====================================================
 // CHECK FRIEND CODE
 // =====================================================
 
@@ -376,6 +432,7 @@ function checkFriendCode() {
 
     const submittedCode =
         friendCodeInput.value.trim();
+
 
     if (
         submittedCode ===
@@ -387,6 +444,7 @@ function checkFriendCode() {
 
         friendMessage.textContent =
             "Access granted.";
+
 
         setTimeout(
             () => {
@@ -411,6 +469,32 @@ function checkFriendCode() {
 
 
 // =====================================================
+// REVEAL BLOCKBATTLE
+// =====================================================
+
+function revealGame() {
+
+    schoolOverlay.classList.add(
+        "unlocking"
+    );
+
+
+    setTimeout(
+        () => {
+
+            schoolOverlay.classList.add(
+                "hidden"
+            );
+
+            gameFrame.focus();
+
+        },
+        1000
+    );
+}
+
+
+// =====================================================
 // EVENTS
 // =====================================================
 
@@ -418,6 +502,7 @@ numberOne.addEventListener(
     "change",
     updateProblem
 );
+
 
 numberTwo.addEventListener(
     "change",
@@ -442,12 +527,6 @@ answerInput.addEventListener(
             checkAnswer();
         }
     }
-);
-
-
-secretCorner.addEventListener(
-    "click",
-    openSecretDoor
 );
 
 
@@ -479,10 +558,12 @@ createNumberSelectors();
 
 createMultiplicationTable();
 
+
 numberOne.value =
     "1";
 
 numberTwo.value =
     "1";
+
 
 updateProblem();
