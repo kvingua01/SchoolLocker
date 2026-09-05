@@ -26,6 +26,7 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
+
         /* =====================================================
            BLOCKBATTLE UNDERNEATH
            ===================================================== */
@@ -91,27 +92,6 @@
 
         #schoolOverlay.hidden {
             display: none;
-        }
-
-
-        /* =====================================================
-           SECRET TOP-RIGHT HOTSPOT
-           ===================================================== */
-
-        #secretCorner {
-            position: fixed;
-
-            top: 0;
-            right: 0;
-
-            width: 90px;
-            height: 90px;
-
-            z-index: 2000;
-
-            background: transparent;
-
-            cursor: default;
         }
 
 
@@ -348,6 +328,10 @@
             color: #31587e;
 
             font-size: 12px;
+
+            cursor: default;
+
+            user-select: none;
         }
 
         .footer {
@@ -381,11 +365,6 @@
                 grid-template-columns:
                     repeat(6, 1fr);
             }
-
-            #secretCorner {
-                width: 75px;
-                height: 75px;
-            }
         }
 
     </style>
@@ -395,7 +374,7 @@
 <body>
 
     <!-- =====================================================
-         BLOCKBATTLE IS ALREADY LOADED UNDER THE OVERLAY
+         BLOCKBATTLE ALREADY LOADED UNDERNEATH
          ===================================================== -->
 
     <iframe
@@ -407,16 +386,10 @@
 
 
     <!-- =====================================================
-         OPAQUE SCHOOL LOCKER SCREEN
+         SCHOOL PAGE
          ===================================================== -->
 
     <div id="schoolOverlay">
-
-        <!-- Invisible secret door trigger -->
-        <div
-            id="secretCorner"
-            aria-hidden="true"
-        ></div>
 
         <main class="mainCard">
 
@@ -450,9 +423,11 @@
 
             </div>
 
+
             <div id="problem">
                 1 × 1 = ?
             </div>
+
 
             <div>
 
@@ -468,6 +443,7 @@
                 </button>
 
             </div>
+
 
             <div id="mathMessage"></div>
 
@@ -507,6 +483,7 @@
             </div>
 
             <div id="multiplicationTable"></div>
+
 
             <div class="footer">
                 Practice multiplication facts from
