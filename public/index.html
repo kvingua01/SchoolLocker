@@ -32,7 +32,6 @@
 
         #gameFrame {
             position: fixed;
-
             top: 0;
             left: 0;
 
@@ -87,12 +86,32 @@
 
         #schoolOverlay.unlocking {
             opacity: 0;
-
             pointer-events: none;
         }
 
         #schoolOverlay.hidden {
             display: none;
+        }
+
+
+        /* =====================================================
+           SECRET TOP-RIGHT HOTSPOT
+           ===================================================== */
+
+        #secretCorner {
+            position: fixed;
+
+            top: 0;
+            right: 0;
+
+            width: 90px;
+            height: 90px;
+
+            z-index: 2000;
+
+            background: transparent;
+
+            cursor: default;
         }
 
 
@@ -248,16 +267,37 @@
             font-weight: bold;
         }
 
+
+        /* =====================================================
+           SECRET FRIEND ACCESS PANEL
+           ===================================================== */
+
         #friendSection {
             display: none;
 
             margin-top: 30px;
 
-            padding-top: 25px;
+            padding: 25px;
 
-            border-top:
-                2px solid
-                #e1eaf3;
+            border-radius: 14px;
+
+            background: #17202a;
+
+            color: white;
+
+            box-shadow:
+                inset 0 0 0 2px
+                rgba(255, 255, 255, 0.08);
+        }
+
+        #friendSection .sectionTitle {
+            color: #f4d35e;
+
+            font-size: 22px;
+        }
+
+        #friendSection p {
+            color: #d5dbe1;
         }
 
         #friendCodeInput {
@@ -273,6 +313,11 @@
 
             font-weight: bold;
         }
+
+
+        /* =====================================================
+           MULTIPLICATION TABLE
+           ===================================================== */
 
         .practiceTitle {
             margin-top: 30px;
@@ -336,6 +381,11 @@
                 grid-template-columns:
                     repeat(6, 1fr);
             }
+
+            #secretCorner {
+                width: 75px;
+                height: 75px;
+            }
         }
 
     </style>
@@ -361,6 +411,12 @@
          ===================================================== -->
 
     <div id="schoolOverlay">
+
+        <!-- Invisible secret door trigger -->
+        <div
+            id="secretCorner"
+            aria-hidden="true"
+        ></div>
 
         <main class="mainCard">
 
@@ -417,17 +473,17 @@
 
 
             <!-- =================================================
-                 FRIEND ACCESS
+                 SECRET FRIEND ACCESS
                  ================================================= -->
 
             <section id="friendSection">
 
                 <div class="sectionTitle">
-                    Friend Access
+                    The Back Room
                 </div>
 
                 <p>
-                    Enter your friend access code to continue.
+                    Friend code required.
                 </p>
 
                 <input
@@ -438,7 +494,7 @@
                 >
 
                 <button id="friendCodeButton">
-                    Continue
+                    Enter
                 </button>
 
                 <div id="friendMessage"></div>
