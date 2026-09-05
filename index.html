@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Bob's School Locker</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* =====================================================
+           BLOCKBATTLE UNDERNEATH
+           ===================================================== */
+
+        #gameFrame {
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            border: none;
+
+            z-index: 1;
+
+            background: #111;
+        }
+
+
+        /* =====================================================
+           SCHOOL LOCKER OVERLAY
+           ===================================================== */
+
+        #schoolOverlay {
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            z-index: 1000;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef6ff,
+                    #dcecff
+                );
+
+            color: #1f2f40;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 25px;
+
+            overflow-y: auto;
+
+            opacity: 1;
+
+            transition:
+                opacity 1s ease;
+        }
+
+        #schoolOverlay.unlocking {
+            opacity: 0;
+
+            pointer-events: none;
+        }
+
+        #schoolOverlay.hidden {
+            display: none;
+        }
+
+
+        /* =====================================================
+           SCHOOL CARD
+           ===================================================== */
+
+        .mainCard {
+            width: min(820px, 96vw);
+
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 32px;
+
+            box-shadow:
+                0 12px 35px
+                rgba(0, 0, 0, 0.18);
+
+            text-align: center;
+        }
+
+        h1 {
+            color: #245b9e;
+
+            margin-top: 0;
+            margin-bottom: 5px;
+
+            font-size: 38px;
+        }
+
+        .subtitle {
+            color: #607386;
+
+            margin-bottom: 30px;
+
+            font-size: 17px;
+        }
+
+        .sectionTitle {
+            font-size: 20px;
+
+            font-weight: bold;
+
+            margin-bottom: 15px;
+
+            color: #294b6e;
+        }
+
+        .selectors {
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            flex-wrap: wrap;
+
+            gap: 15px;
+        }
+
+        select {
+            font-size: 24px;
+
+            padding: 10px 16px;
+
+            border:
+                2px solid
+                #b9cce1;
+
+            border-radius: 9px;
+
+            background: white;
+
+            color: #17395f;
+
+            cursor: pointer;
+        }
+
+        .multiplySymbol {
+            font-size: 34px;
+
+            font-weight: bold;
+
+            color: #31587e;
+        }
+
+        #problem {
+            margin: 30px 0 18px 0;
+
+            font-size: 48px;
+
+            font-weight: bold;
+
+            color: #17395f;
+        }
+
+        input {
+            font-size: 22px;
+
+            padding: 11px 14px;
+
+            border:
+                2px solid
+                #b9cce1;
+
+            border-radius: 9px;
+
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #3478c9;
+        }
+
+        #answerInput {
+            width: 170px;
+
+            text-align: center;
+        }
+
+        button {
+            border: none;
+
+            border-radius: 9px;
+
+            padding: 12px 20px;
+
+            margin: 6px;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            color: white;
+
+            background: #3478c9;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2865ac;
+        }
+
+        #mathMessage {
+            min-height: 30px;
+
+            margin-top: 12px;
+
+            font-size: 17px;
+
+            font-weight: bold;
+        }
+
+        #friendSection {
+            display: none;
+
+            margin-top: 30px;
+
+            padding-top: 25px;
+
+            border-top:
+                2px solid
+                #e1eaf3;
+        }
+
+        #friendCodeInput {
+            width: min(330px, 80vw);
+
+            text-align: center;
+        }
+
+        #friendMessage {
+            min-height: 28px;
+
+            margin-top: 10px;
+
+            font-weight: bold;
+        }
+
+        .practiceTitle {
+            margin-top: 30px;
+
+            margin-bottom: 12px;
+
+            font-size: 16px;
+
+            color: #607386;
+        }
+
+        #multiplicationTable {
+            display: grid;
+
+            grid-template-columns:
+                repeat(12, 1fr);
+
+            gap: 4px;
+        }
+
+        .tableCell {
+            background: #eef5fc;
+
+            border-radius: 5px;
+
+            padding: 6px 2px;
+
+            color: #31587e;
+
+            font-size: 12px;
+        }
+
+        .footer {
+            margin-top: 25px;
+
+            color: #8796a5;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           MOBILE
+           ===================================================== */
+
+        @media (max-width: 650px) {
+
+            .mainCard {
+                padding: 22px 14px;
+            }
+
+            h1 {
+                font-size: 29px;
+            }
+
+            #problem {
+                font-size: 38px;
+            }
+
+            #multiplicationTable {
+                grid-template-columns:
+                    repeat(6, 1fr);
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <!-- =====================================================
+         BLOCKBATTLE IS ALREADY LOADED UNDER THE OVERLAY
+         ===================================================== -->
+
+    <iframe
+        id="gameFrame"
+        src="https://bobsgamelocker.com"
+        title="BlockBattle"
+        allow="fullscreen"
+    ></iframe>
+
+
+    <!-- =====================================================
+         OPAQUE SCHOOL LOCKER SCREEN
+         ===================================================== -->
+
+    <div id="schoolOverlay">
+
+        <main class="mainCard">
+
+            <h1>
+                Bob's School Locker
+            </h1>
+
+            <div class="subtitle">
+                Multiplication Practice
+            </div>
+
+            <div class="sectionTitle">
+                Choose a multiplication problem
+            </div>
+
+            <div class="selectors">
+
+                <select
+                    id="numberOne"
+                    aria-label="First number"
+                ></select>
+
+                <span class="multiplySymbol">
+                    ×
+                </span>
+
+                <select
+                    id="numberTwo"
+                    aria-label="Second number"
+                ></select>
+
+            </div>
+
+            <div id="problem">
+                1 × 1 = ?
+            </div>
+
+            <div>
+
+                <input
+                    id="answerInput"
+                    type="number"
+                    placeholder="Answer"
+                    autocomplete="off"
+                >
+
+                <button id="checkAnswerButton">
+                    Check Answer
+                </button>
+
+            </div>
+
+            <div id="mathMessage"></div>
+
+
+            <!-- =================================================
+                 FRIEND ACCESS
+                 ================================================= -->
+
+            <section id="friendSection">
+
+                <div class="sectionTitle">
+                    Friend Access
+                </div>
+
+                <p>
+                    Enter your friend access code to continue.
+                </p>
+
+                <input
+                    id="friendCodeInput"
+                    type="password"
+                    placeholder="Friend Code"
+                    autocomplete="off"
+                >
+
+                <button id="friendCodeButton">
+                    Continue
+                </button>
+
+                <div id="friendMessage"></div>
+
+            </section>
+
+
+            <div class="practiceTitle">
+                Multiplication Table
+            </div>
+
+            <div id="multiplicationTable"></div>
+
+            <div class="footer">
+                Practice multiplication facts from
+                1 × 1 through 12 × 12.
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <script src="school.js"></script>
+
+</body>
+
+</html>
