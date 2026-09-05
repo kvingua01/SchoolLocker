@@ -12,6 +12,13 @@ const FRIEND_CODE = "bob67123";
 
 
 // =====================================================
+// STATE
+// =====================================================
+
+let mathUnlocked = false;
+
+
+// =====================================================
 // PAGE ELEMENTS
 // =====================================================
 
@@ -23,6 +30,11 @@ const schoolOverlay =
 const gameFrame =
     document.getElementById(
         "gameFrame"
+    );
+
+const secretCorner =
+    document.getElementById(
+        "secretCorner"
     );
 
 const numberOne =
@@ -195,6 +207,9 @@ function updateProblem() {
     mathMessage.textContent =
         "";
 
+    mathUnlocked =
+        false;
+
     friendSection.style.display =
         "none";
 
@@ -253,6 +268,9 @@ function checkAnswer() {
         correctAnswer
     ) {
 
+        mathUnlocked =
+            true;
+
         mathMessage.style.color =
             "#238636";
 
@@ -260,18 +278,12 @@ function checkAnswer() {
             "Correct! Great job.";
 
         friendSection.style.display =
-            "block";
-
-        setTimeout(
-            () => {
-
-                friendCodeInput.focus();
-
-            },
-            100
-        );
+            "none";
 
     } else {
+
+        mathUnlocked =
+            false;
 
         mathMessage.style.color =
             "#d93025";
@@ -288,6 +300,46 @@ function checkAnswer() {
         friendMessage.textContent =
             "";
     }
+}
+
+
+// =====================================================
+// SECRET CORNER
+// =====================================================
+
+function openSecretDoor() {
+
+    if (
+        !mathUnlocked
+    ) {
+        return;
+    }
+
+    if (
+        friendSection.style.display ===
+        "block"
+    ) {
+
+        friendSection.style.display =
+            "none";
+
+        return;
+    }
+
+    friendSection.style.display =
+        "block";
+
+    friendMessage.textContent =
+        "";
+
+    setTimeout(
+        () => {
+
+            friendCodeInput.focus();
+
+        },
+        100
+    );
 }
 
 
@@ -325,14 +377,13 @@ function checkFriendCode() {
     const submittedCode =
         friendCodeInput.value.trim();
 
-
     if (
         submittedCode ===
         FRIEND_CODE
     ) {
 
         friendMessage.style.color =
-            "#238636";
+            "#5ee06c";
 
         friendMessage.textContent =
             "Access granted.";
@@ -349,7 +400,7 @@ function checkFriendCode() {
     } else {
 
         friendMessage.style.color =
-            "#d93025";
+            "#ff6b6b";
 
         friendMessage.textContent =
             "Incorrect friend code.";
@@ -391,6 +442,12 @@ answerInput.addEventListener(
             checkAnswer();
         }
     }
+);
+
+
+secretCorner.addEventListener(
+    "click",
+    openSecretDoor
 );
 
 
