@@ -1,7 +1,9 @@
 // =====================================================
 // BOB'S SCHOOL LOCKER
 //
-// RANDOM MULTIPLICATION QUESTIONS
+// MODES:
+// 12 × 12
+// 100 × 100
 //
 // SECRET:
 // 6 × 7
@@ -16,10 +18,16 @@
 
 const FRIEND_CODE = "bob67123";
 
+const SMALL_MAX = 12;
+
+const LARGE_MAX = 100;
+
 
 // =====================================================
-// SECRET STATE
+// STATE
 // =====================================================
+
+let currentMax = SMALL_MAX;
 
 let secret63Unlocked = false;
 
@@ -68,6 +76,16 @@ const randomQuestionButton =
         "randomQuestionButton"
     );
 
+const modeToggleButton =
+    document.getElementById(
+        "modeToggleButton"
+    );
+
+const modeLabel =
+    document.getElementById(
+        "modeLabel"
+    );
+
 const mathMessage =
     document.getElementById(
         "mathMessage"
@@ -98,6 +116,16 @@ const multiplicationTable =
         "multiplicationTable"
     );
 
+const tableScroller =
+    document.getElementById(
+        "tableScroller"
+    );
+
+const footerText =
+    document.getElementById(
+        "footerText"
+    );
+
 
 // =====================================================
 // CREATE NUMBER SELECTORS
@@ -105,9 +133,16 @@ const multiplicationTable =
 
 function createNumberSelectors() {
 
+    numberOne.innerHTML =
+        "";
+
+    numberTwo.innerHTML =
+        "";
+
+
     for (
         let number = 1;
-        number <= 12;
+        number <= currentMax;
         number++
     ) {
 
@@ -154,15 +189,22 @@ function createMultiplicationTable() {
     multiplicationTable.innerHTML =
         "";
 
+
+    multiplicationTable.style.gridTemplateColumns =
+        "repeat(" +
+        currentMax +
+        ", 42px)";
+
+
     for (
         let row = 1;
-        row <= 12;
+        row <= currentMax;
         row++
     ) {
 
         for (
             let column = 1;
-            column <= 12;
+            column <= currentMax;
             column++
         ) {
 
@@ -182,10 +224,10 @@ function createMultiplicationTable() {
 
 
             /*
-                EVERY 63 LOOKS NORMAL.
+                63 IS THE SECRET CLICK.
 
-                Clicking a 63 only works
-                after correctly solving:
+                It only works after
+                correctly answering:
 
                 6 × 7 = 42
             */
@@ -206,6 +248,13 @@ function createMultiplicationTable() {
             );
         }
     }
+
+
+    tableScroller.scrollTop =
+        0;
+
+    tableScroller.scrollLeft =
+        0;
 }
 
 
@@ -240,11 +289,6 @@ function updateProblem() {
         "";
 
 
-    /*
-        ANY NEW QUESTION LOCKS
-        THE SECRET AGAIN.
-    */
-
     secret63Unlocked =
         false;
 
@@ -269,26 +313,18 @@ function updateProblem() {
 
 function randomQuestion() {
 
-    /*
-        Pick two random whole numbers
-        from 1 through 12.
-    */
-
     const randomFirst =
         Math.floor(
-            Math.random() * 12
+            Math.random() *
+            currentMax
         ) + 1;
 
     const randomSecond =
         Math.floor(
-            Math.random() * 12
+            Math.random() *
+            currentMax
         ) + 1;
 
-
-    /*
-        Set the dropdowns to match
-        the randomly selected question.
-    */
 
     numberOne.value =
         String(
@@ -301,13 +337,82 @@ function randomQuestion() {
         );
 
 
-    /*
-        updateProblem resets the answer,
-        hides messages and locks the
-        secret until answered correctly.
-    */
+    updateProblem();
+}
+
+
+// =====================================================
+// SWITCH MODE
+// =====================================================
+
+function toggleMode() {
+
+    if (
+        currentMax ===
+        SMALL_MAX
+    ) {
+
+        currentMax =
+            LARGE_MAX;
+
+    } else {
+
+        currentMax =
+            SMALL_MAX;
+    }
+
+
+    updateModeText();
+
+
+    createNumberSelectors();
+
+
+    numberOne.value =
+        "1";
+
+    numberTwo.value =
+        "1";
+
+
+    createMultiplicationTable();
+
 
     updateProblem();
+}
+
+
+// =====================================================
+// UPDATE MODE LABELS
+// =====================================================
+
+function updateModeText() {
+
+    if (
+        currentMax ===
+        SMALL_MAX
+    ) {
+
+        modeLabel.textContent =
+            "Current Max: 12 × 12";
+
+        modeToggleButton.textContent =
+            "Switch to 100 × 100";
+
+        footerText.textContent =
+            "Practice multiplication facts from 1 × 1 through 12 × 12.";
+
+    } else {
+
+        modeLabel.textContent =
+            "Current Max: 100 × 100";
+
+        modeToggleButton.textContent =
+            "Switch to 12 × 12";
+
+        footerText.textContent =
+            "Practice multiplication facts from 1 × 1 through 100 × 100.";
+    }
 }
 
 
@@ -351,10 +456,6 @@ function checkAnswer() {
         );
 
 
-    // =================================================
-    // WRONG ANSWER
-    // =================================================
-
     if (
         submittedAnswer !==
         correctAnswer
@@ -376,10 +477,6 @@ function checkAnswer() {
     }
 
 
-    // =================================================
-    // CORRECT ANSWER
-    // =================================================
-
     mathMessage.style.color =
         "#238636";
 
@@ -391,8 +488,6 @@ function checkAnswer() {
         SECRET ONLY WORKS FOR:
 
         6 × 7 = 42
-
-        7 × 6 DOES NOT UNLOCK IT.
     */
 
     if (
@@ -422,11 +517,6 @@ function checkAnswer() {
 
 function openSecretDoor() {
 
-    /*
-        Normally clicking 63
-        does absolutely nothing.
-    */
-
     if (
         !secret63Unlocked
     ) {
@@ -434,12 +524,6 @@ function openSecretDoor() {
         return;
     }
 
-
-    /*
-        After solving 6 × 7 = 42,
-        clicking 63 reveals the
-        Back Room.
-    */
 
     if (
         friendSection.style.display ===
@@ -569,6 +653,12 @@ randomQuestionButton.addEventListener(
 );
 
 
+modeToggleButton.addEventListener(
+    "click",
+    toggleMode
+);
+
+
 answerInput.addEventListener(
     "keydown",
     (event) => {
@@ -610,6 +700,8 @@ friendCodeInput.addEventListener(
 createNumberSelectors();
 
 createMultiplicationTable();
+
+updateModeText();
 
 
 numberOne.value =
