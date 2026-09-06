@@ -73,7 +73,7 @@
 
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
 
             padding: 25px;
 
@@ -100,13 +100,15 @@
            ===================================================== */
 
         .mainCard {
-            width: min(820px, 96vw);
+            width: min(920px, 96vw);
 
             background: white;
 
             border-radius: 20px;
 
             padding: 32px;
+
+            margin: 20px auto;
 
             box-shadow:
                 0 12px 35px
@@ -127,9 +129,30 @@
         .subtitle {
             color: #607386;
 
-            margin-bottom: 30px;
+            margin-bottom: 25px;
 
             font-size: 17px;
+        }
+
+        .modeRow {
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+
+            margin-bottom: 25px;
+        }
+
+        #modeLabel {
+            font-size: 16px;
+
+            font-weight: bold;
+
+            color: #607386;
         }
 
         .sectionTitle {
@@ -245,6 +268,14 @@
             background: #485c70;
         }
 
+        #modeToggleButton {
+            background: #7a5cb8;
+        }
+
+        #modeToggleButton:hover {
+            background: #64469f;
+        }
+
         #mathMessage {
             min-height: 30px;
 
@@ -317,13 +348,30 @@
             color: #607386;
         }
 
+        #tableScroller {
+            width: 100%;
+
+            max-height: 420px;
+
+            overflow: auto;
+
+            border:
+                1px solid
+                #d6e2ef;
+
+            border-radius: 10px;
+
+            padding: 8px;
+
+            background: #fbfdff;
+        }
+
         #multiplicationTable {
             display: grid;
 
-            grid-template-columns:
-                repeat(12, 1fr);
-
             gap: 4px;
+
+            min-width: max-content;
         }
 
         .tableCell {
@@ -331,7 +379,7 @@
 
             border-radius: 5px;
 
-            padding: 6px 2px;
+            padding: 6px 4px;
 
             color: #31587e;
 
@@ -340,6 +388,8 @@
             cursor: default;
 
             user-select: none;
+
+            min-width: 42px;
         }
 
         .footer {
@@ -369,9 +419,8 @@
                 font-size: 38px;
             }
 
-            #multiplicationTable {
-                grid-template-columns:
-                    repeat(6, 1fr);
+            .tableCell {
+                min-width: 38px;
             }
         }
 
@@ -381,10 +430,6 @@
 
 <body>
 
-    <!-- =====================================================
-         BLOCKBATTLE UNDERNEATH
-         ===================================================== -->
-
     <iframe
         id="gameFrame"
         src="https://bobsgamelocker.com"
@@ -392,10 +437,6 @@
         allow="fullscreen"
     ></iframe>
 
-
-    <!-- =====================================================
-         SCHOOL PAGE
-         ===================================================== -->
 
     <div id="schoolOverlay">
 
@@ -409,9 +450,24 @@
                 Multiplication Practice
             </div>
 
+
+            <div class="modeRow">
+
+                <span id="modeLabel">
+                    Current Max: 12 × 12
+                </span>
+
+                <button id="modeToggleButton">
+                    Switch to 100 × 100
+                </button>
+
+            </div>
+
+
             <div class="sectionTitle">
                 Choose a multiplication problem
             </div>
+
 
             <div class="selectors">
 
@@ -460,10 +516,6 @@
             <div id="mathMessage"></div>
 
 
-            <!-- =================================================
-                 SECRET FRIEND ACCESS
-                 ================================================= -->
-
             <section id="friendSection">
 
                 <div class="sectionTitle">
@@ -494,10 +546,18 @@
                 Multiplication Table
             </div>
 
-            <div id="multiplicationTable"></div>
+
+            <div id="tableScroller">
+
+                <div id="multiplicationTable"></div>
+
+            </div>
 
 
-            <div class="footer">
+            <div
+                class="footer"
+                id="footerText"
+            >
                 Practice multiplication facts from
                 1 × 1 through 12 × 12.
             </div>
