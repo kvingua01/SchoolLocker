@@ -1,6 +1,12 @@
 // =====================================================
 // BOB'S SCHOOL LOCKER
-// SECRET 6 × 7 -> 42 -> CLICK 63
+//
+// RANDOM MULTIPLICATION QUESTIONS
+//
+// SECRET:
+// 6 × 7
+// ANSWER 42
+// THEN CLICK 63
 // =====================================================
 
 
@@ -55,6 +61,11 @@ const answerInput =
 const checkAnswerButton =
     document.getElementById(
         "checkAnswerButton"
+    );
+
+const randomQuestionButton =
+    document.getElementById(
+        "randomQuestionButton"
     );
 
 const mathMessage =
@@ -171,13 +182,10 @@ function createMultiplicationTable() {
 
 
             /*
-                63 IS THE SECRET DOOR.
+                EVERY 63 LOOKS NORMAL.
 
-                It looks exactly like every
-                other multiplication-table number.
-
-                The click only works after
-                correctly solving exactly:
+                Clicking a 63 only works
+                after correctly solving:
 
                 6 × 7 = 42
             */
@@ -217,6 +225,7 @@ function updateProblem() {
             numberTwo.value
         );
 
+
     problem.textContent =
         firstNumber +
         " × " +
@@ -232,8 +241,8 @@ function updateProblem() {
 
 
     /*
-        Changing the multiplication problem
-        locks the secret again.
+        ANY NEW QUESTION LOCKS
+        THE SECRET AGAIN.
     */
 
     secret63Unlocked =
@@ -251,6 +260,54 @@ function updateProblem() {
 
 
     answerInput.focus();
+}
+
+
+// =====================================================
+// RANDOM QUESTION
+// =====================================================
+
+function randomQuestion() {
+
+    /*
+        Pick two random whole numbers
+        from 1 through 12.
+    */
+
+    const randomFirst =
+        Math.floor(
+            Math.random() * 12
+        ) + 1;
+
+    const randomSecond =
+        Math.floor(
+            Math.random() * 12
+        ) + 1;
+
+
+    /*
+        Set the dropdowns to match
+        the randomly selected question.
+    */
+
+    numberOne.value =
+        String(
+            randomFirst
+        );
+
+    numberTwo.value =
+        String(
+            randomSecond
+        );
+
+
+    /*
+        updateProblem resets the answer,
+        hides messages and locks the
+        secret until answered correctly.
+    */
+
+    updateProblem();
 }
 
 
@@ -331,14 +388,11 @@ function checkAnswer() {
 
 
     /*
-        THE SECRET ONLY UNLOCKS FOR:
+        SECRET ONLY WORKS FOR:
 
         6 × 7 = 42
 
-        7 × 6 DOES NOT COUNT.
-
-        Any other correct multiplication
-        problem also does not count.
+        7 × 6 DOES NOT UNLOCK IT.
     */
 
     if (
@@ -357,14 +411,6 @@ function checkAnswer() {
     }
 
 
-    /*
-        Do NOT show the Friend Access panel.
-
-        Even after 6 × 7 is solved,
-        the player still has to know
-        to click a 63 in the table.
-    */
-
     friendSection.style.display =
         "none";
 }
@@ -377,7 +423,8 @@ function checkAnswer() {
 function openSecretDoor() {
 
     /*
-        Clicking 63 normally does absolutely nothing.
+        Normally clicking 63
+        does absolutely nothing.
     */
 
     if (
@@ -389,9 +436,9 @@ function openSecretDoor() {
 
 
     /*
-        Once 6 × 7 = 42 has been
-        correctly completed, clicking
-        63 opens the Back Room.
+        After solving 6 × 7 = 42,
+        clicking 63 reveals the
+        Back Room.
     */
 
     if (
@@ -513,6 +560,12 @@ numberTwo.addEventListener(
 checkAnswerButton.addEventListener(
     "click",
     checkAnswer
+);
+
+
+randomQuestionButton.addEventListener(
+    "click",
+    randomQuestion
 );
 
 
